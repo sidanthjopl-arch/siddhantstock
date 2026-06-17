@@ -9,7 +9,11 @@ const USERS = {
   "Surjit": "Surjit55987",
   "Salman": "Salman@989325",
   "Priya": "Priya@56674",
-  "Nikita": "Nicks25778"
+  "Nikita": "Nicks25778",
+  "Abhishek": "Abhi@225",
+  "Shakti": "Shakri@998",
+  "Meet": "Meet@65",
+  "Shivam": "Shivam@689"
 };
 
 // ──────────────────────────────────────────────────────────
