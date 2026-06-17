@@ -66,7 +66,13 @@
       <button id="confirmRackBtn" class="btn btn-primary btn-block" type="button">Confirm rack</button>
     </section>
 
-    <button id="changeRackBtn" class="btn btn-ghost btn-block" hidden type="button">↺ Change rack</button>
+    <div class="rack-banner" id="rackBanner" hidden>
+      <div class="rack-banner-text">
+        <span class="rack-banner-label">Current rack</span>
+        <span class="rack-banner-value" id="rackBannerValue"></span>
+      </div>
+      <button id="changeRackBtn" class="btn btn-ghost btn-sm" type="button">Change</button>
+    </div>
 
     <!-- STEP 2 — SKU -->
     <section class="card" id="skuCard" hidden>

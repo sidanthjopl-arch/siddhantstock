@@ -52,6 +52,8 @@ const rackDisplay = el("rackDisplay");
 const rackInput = el("rackInput");
 const scanRackBtn = el("scanRackBtn");
 const confirmRackBtn = el("confirmRackBtn");
+const rackBanner = el("rackBanner");
+const rackBannerValue = el("rackBannerValue");
 const changeRackBtn = el("changeRackBtn");
 
 const skuCard = el("skuCard");
@@ -204,7 +206,8 @@ function confirmRack() {
   rackDisplay.classList.add("filled");
 
   rackCard.hidden = true;
-  changeRackBtn.hidden = false;
+  rackBannerValue.textContent = val;
+  rackBanner.hidden = false;
   skuCard.hidden = false;
   skuInput.value = "";
   skuInput.focus();
@@ -214,7 +217,7 @@ function confirmRack() {
 
 function changeRack() {
   rackCard.hidden = false;
-  changeRackBtn.hidden = true;
+  rackBanner.hidden = true;
   skuCard.hidden = true;
   resetSkuStep();
   rackInput.value = state.rack;
