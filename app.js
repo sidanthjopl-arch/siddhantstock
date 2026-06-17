@@ -52,6 +52,7 @@ const changeRackBtn = el("changeRackBtn");
 
 const skuCard = el("skuCard");
 const skuInput = el("skuInput");
+const skuSuggestions = el("skuSuggestions");
 const scanSkuBtn = el("scanSkuBtn");
 const skuLoading = el("skuLoading");
 const skuNotFound = el("skuNotFound");
@@ -121,7 +122,25 @@ function wireEvents() {
   });
 
   skuInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") { e.preventDefault(); handleSkuLookup(); }
+    if (e.key === "Enter") { e.preventDefault(); hideSuggestions(); handleSkuLookup(); }
+    if (e.key === "Escape") { hideSuggestions(); }
+  });
+  skuInput.addEventListener("input", () => renderSuggestions(skuInput.value));
+  skuInput.addEventListener("focus", () => {
+    if (skuInput.value.trim()) renderSuggestions(skuInput.value);
+  });
+  skuSuggestions.addEventListener("click", (e) => {
+    const li = e.target.closest("li[data-sku]");
+    if (!li) return;
+    const sku = li.getAttribute("data-sku");
+    skuInput.value = sku;
+    hideSuggestions();
+    handleSkuLookup(sku);
+  });
+  document.addEventListener("click", (e) => {
+    if (e.target !== skuInput && !skuSuggestions.contains(e.target)) {
+      hideSuggestions();
+    }
   });
 
   qtyInput.addEventListener("input", updateSubmitEnabled);
@@ -216,6 +235,52 @@ function resetSkuStep() {
   submitBtn.disabled = true;
   state.sku = "";
   state.imageUrl = "";
+  hideSuggestions();
+}
+
+function escapeHtml(s) {
+  return (s || "").toString()
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function renderSuggestions(query) {
+  const q = normalize(query);
+  if (!q) { hideSuggestions(); return; }
+
+  const starts = [];
+  const contains = [];
+  for (const item of state.skuMap.values()) {
+    const normSku = normalize(item.sku);
+    if (normSku.startsWith(q)) {
+      starts.push(item);
+    } else if (normSku.includes(q)) {
+      contains.push(item);
+    }
+    if (starts.length >= 8) break;
+  }
+  const matches = starts.concat(contains).slice(0, 8);
+
+  if (!matches.length) {
+    skuSuggestions.innerHTML = `<li class="sg-empty">No matching SKU</li>`;
+    skuSuggestions.hidden = false;
+    return;
+  }
+
+  skuSuggestions.innerHTML = matches.map((m) => `
+    <li data-sku="${escapeHtml(m.sku)}">
+      ${m.imageUrl ? `<img src="${escapeHtml(m.imageUrl)}" alt="" onerror="this.style.display='none'">` : ""}
+      <span>${escapeHtml(m.sku)}</span>
+    </li>
+  `).join("");
+  skuSuggestions.hidden = false;
+}
+
+function hideSuggestions() {
+  skuSuggestions.hidden = true;
+  skuSuggestions.innerHTML = "";
 }
 
 function handleSkuLookup(rawValue) {
@@ -358,6 +423,7 @@ function onScanSuccess(decodedText) {
     confirmRack();
   } else if (target === "sku") {
     skuInput.value = decodedText.trim();
+    hideSuggestions();
     handleSkuLookup(decodedText.trim());
   }
 }

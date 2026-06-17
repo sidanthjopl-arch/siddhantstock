@@ -71,9 +71,12 @@
     <!-- STEP 2 — SKU -->
     <section class="card" id="skuCard" hidden>
       <div class="card-label">02 — SKU</div>
-      <div class="input-row">
-        <input type="text" id="skuInput" placeholder="Scan or type SKU, then press Enter" autocomplete="off" autocapitalize="off">
-        <button id="scanSkuBtn" class="btn btn-accent" type="button">Scan</button>
+      <div class="sku-input-wrap">
+        <div class="input-row">
+          <input type="text" id="skuInput" placeholder="Type or scan SKU…" autocomplete="off" autocapitalize="off">
+          <button id="scanSkuBtn" class="btn btn-accent" type="button">Scan</button>
+        </div>
+        <ul id="skuSuggestions" class="suggestions" hidden></ul>
       </div>
 
       <p id="skuLoading" class="hint-text">Loading SKU master list…</p>
