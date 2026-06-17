@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Inward Stock — Rack Entry Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ───────────── LOGIN SCREEN ───────────── -->
+<main id="loginScreen" class="screen">
+  <div class="login-card">
+    <div class="brand">
+      <span class="brand-mark">IS</span>
+      <h1>INWARD STOCK</h1>
+      <p class="brand-sub">Rack &amp; SKU entry terminal</p>
+    </div>
+    <form id="loginForm" autocomplete="off">
+      <label class="field-label" for="loginUser">Operator</label>
+      <select id="loginUser" required>
+        <option value="" disabled selected>Select your name</option>
+      </select>
+
+      <label class="field-label" for="loginPass">Password</label>
+      <input type="password" id="loginPass" placeholder="Enter password" required autocomplete="off">
+
+      <button type="submit" class="btn btn-primary btn-block">Log in</button>
+      <p id="loginError" class="error-text" hidden>Wrong password. Try again.</p>
+    </form>
+  </div>
+</main>
+
+<!-- ───────────── APP SCREEN ───────────── -->
+<main id="appScreen" class="screen" hidden>
+
+  <header class="topbar">
+    <div class="topbar-brand"><span class="brand-mark small">IS</span> Inward Stock</div>
+    <div class="topbar-user">
+      <span id="userName" class="user-chip"></span>
+      <button id="logoutBtn" class="btn btn-ghost btn-sm">Log out</button>
+    </div>
+  </header>
+
+  <div class="tracker">
+    <div class="tracker-step" data-step="rack" id="trackRack"><span class="dot"></span>Rack</div>
+    <div class="tracker-line"></div>
+    <div class="tracker-step" data-step="sku" id="trackSku"><span class="dot"></span>SKU</div>
+    <div class="tracker-line"></div>
+    <div class="tracker-step" data-step="qty" id="trackQty"><span class="dot"></span>Qty &amp; save</div>
+  </div>
+
+  <div class="content">
+
+    <!-- STEP 1 — RACK -->
+    <section class="card" id="rackCard">
+      <div class="card-label">01 — Rack location</div>
+      <div class="rack-display" id="rackDisplay">No rack scanned yet</div>
+      <div class="input-row">
+        <input type="text" id="rackInput" placeholder="Scan or type rack code" autocomplete="off" autocapitalize="off">
+        <button id="scanRackBtn" class="btn btn-accent" type="button">Scan</button>
+      </div>
+      <button id="confirmRackBtn" class="btn btn-primary btn-block" type="button">Confirm rack</button>
+    </section>
+
+    <button id="changeRackBtn" class="btn btn-ghost btn-block" hidden type="button">↺ Change rack</button>
+
+    <!-- STEP 2 — SKU -->
+    <section class="card" id="skuCard" hidden>
+      <div class="card-label">02 — SKU</div>
+      <div class="input-row">
+        <input type="text" id="skuInput" placeholder="Scan or type SKU, then press Enter" autocomplete="off" autocapitalize="off">
+        <button id="scanSkuBtn" class="btn btn-accent" type="button">Scan</button>
+      </div>
+
+      <p id="skuLoading" class="hint-text">Loading SKU master list…</p>
+      <p id="skuNotFound" class="error-text" hidden>SKU not found in master list. Check the code and try again.</p>
+
+      <div id="skuResult" class="sku-result" hidden>
+        <div class="ticket">
+          <img id="skuImage" src="" alt="">
+          <div class="ticket-info">
+            <div class="ticket-eyebrow">Matched SKU</div>
+            <div class="ticket-sku" id="skuLabel"></div>
+          </div>
+        </div>
+        <div class="perforation"></div>
+        <div class="qty-row">
+          <label class="field-label" for="qtyInput">Quantity received</label>
+          <input type="number" id="qtyInput" min="1" inputmode="numeric" placeholder="0">
+        </div>
+        <button id="submitBtn" class="btn btn-primary btn-block" type="button" disabled>Save entry</button>
+      </div>
+    </section>
+
+    <!-- SESSION LOG -->
+    <section class="log-section">
+      <div class="card-label">Saved this session</div>
+      <ul id="entryLog" class="entry-log">
+        <li class="entry-empty">Nothing saved yet.</li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+<!-- ───────────── CAMERA SCANNER MODAL ───────────── -->
+<div id="scannerModal" class="modal" hidden>
+  <div class="modal-inner">
+    <div class="modal-header">
+      <span id="scannerTitle">Scan code</span>
+      <button id="closeScannerBtn" class="btn btn-ghost btn-sm" type="button">Close</button>
+    </div>
+    <div id="reader"></div>
+    <p class="modal-hint">Align the code inside the frame</p>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
