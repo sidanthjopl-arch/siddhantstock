@@ -11,7 +11,7 @@ const USERS = {
   "Priya": "Priya@56674",
   "Nikita": "Nicks25778",
   "Abhishek": "Abhi@225",
-  "Shakti": "Shakri@998",
+  "Priyanka": "Pri@70",
   "Meet": "Meet@65",
   "Shivam": "Shivam@689"
 };
